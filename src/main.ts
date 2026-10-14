@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
   const port = Number(process.env.PORT) || 3100;
@@ -11,4 +11,7 @@ async function bootstrap() {
   console.log(`Dashboard Empresarial Backend: http://localhost:${port}`);
 }
 
-bootstrap();
+bootstrap().catch((error: unknown) => {
+  console.error('Error al iniciar Dashboard Empresarial Backend:', error);
+  process.exitCode = 1;
+});
