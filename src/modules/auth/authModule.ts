@@ -70,6 +70,6 @@ import { ObtenerPerfilController } from './infrastructure/http/controllers/obten
     },
   ],
 
-  exports: [AuthService],
+  exports: [AuthService, PASSWORD_HASHER],
 })
 export class AuthModule {}

@@ -8,7 +8,12 @@ export class EmpresaOrmEntity {
   @Column({ name: 'nombre', type: 'nvarchar', length: 200 })
   nombre!: string;
 
-  @Column({ name: 'ruc', type: 'varchar', length: 11, nullable: true })
+  @Column({
+    name: 'ruc',
+    type: 'varchar',
+    length: 11,
+    nullable: true,
+  })
   ruc!: string | null;
 
   @Column({ name: 'estado', type: 'varchar', length: 20 })

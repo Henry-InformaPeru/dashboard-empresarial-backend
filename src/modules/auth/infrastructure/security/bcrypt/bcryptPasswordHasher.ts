@@ -5,6 +5,12 @@ import type { PasswordHasherPort } from '../../../application/ports/output/passw
 
 @Injectable()
 export class BcryptPasswordHasher implements PasswordHasherPort {
+  private readonly saltRounds = 12;
+
+  async generar(passwordPlano: string): Promise<string> {
+    return bcrypt.hash(passwordPlano, this.saltRounds);
+  }
+
   async verificar(
     passwordPlano: string,
     passwordHash: string,

@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '../auth/authModule';
 
 import { EmpresaOrmEntity } from './infrastructure/persistence/entities/empresaOrm.entity';
-
 import { EmpresaRepository } from './infrastructure/persistence/repositories/empresaRepository';
 
 import { EMPRESA_REPOSITORY } from './application/ports/output/empresaRepository.port';
@@ -31,5 +30,6 @@ import { EmpresaGuard } from '../../shared/infrastructure/guards/empresaGuard';
       useClass: EmpresaRepository,
     },
   ],
+  exports: [EMPRESA_REPOSITORY],
 })
 export class EmpresasModule {}
