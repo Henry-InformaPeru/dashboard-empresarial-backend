@@ -11,4 +11,7 @@ export const envValidationSchema = Joi.object({
 
   DB_ENCRYPT: Joi.boolean().default(false),
   DB_TRUST_SERVER_CERTIFICATE: Joi.boolean().default(false),
+
+  JWT_SECRET: Joi.string().min(32).required(),
+  JWT_EXPIRES_IN: Joi.string().valid('1h').default('1h'),
 });
