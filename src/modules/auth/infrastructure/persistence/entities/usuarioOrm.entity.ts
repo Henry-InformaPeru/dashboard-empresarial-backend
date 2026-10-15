@@ -1,8 +1,11 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ schema: 'seguridad', name: 'Usuarios' })
 export class UsuarioOrmEntity {
-  @PrimaryColumn({ name: 'id_usuario', type: 'int' })
+  @PrimaryGeneratedColumn('increment', {
+    name: 'id_usuario',
+    type: 'int',
+  })
   id!: number;
 
   @Column({ name: 'id_empresa', type: 'int', nullable: true })
@@ -38,9 +41,18 @@ export class UsuarioOrmEntity {
   })
   passwordHash!: string;
 
-  @Column({ name: 'estado', type: 'varchar', length: 20 })
+  @Column({
+    name: 'estado',
+    type: 'varchar',
+    length: 20,
+    default: 'ACTIVO',
+  })
   estado!: string;
 
-  @Column({ name: 'fecha_creacion', type: 'datetime2' })
+  @Column({
+    name: 'fecha_creacion',
+    type: 'datetime2',
+    default: () => 'SYSDATETIME()',
+  })
   fechaCreacion!: Date;
 }
