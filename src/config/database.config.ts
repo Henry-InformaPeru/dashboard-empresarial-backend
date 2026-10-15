@@ -13,7 +13,7 @@ export const databaseConfig = (
   password: config.getOrThrow<string>('DB_PASSWORD'),
   database: config.getOrThrow<string>('DB_NAME'),
 
-  entities: [],
+  autoLoadEntities: true,
 
   synchronize: false,
   migrationsRun: false,
