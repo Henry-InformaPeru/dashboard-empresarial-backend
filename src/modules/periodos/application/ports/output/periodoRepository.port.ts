@@ -11,4 +11,11 @@ export interface PeriodoRepositoryPort {
   ): Promise<DashboardPeriodo | null>;
 
   tieneAcceso(dashboardId: number, empresaId: number): Promise<boolean>;
+
+  crear(
+    dashboardId: number,
+    periodo: string,
+    urlPowerbi: string,
+    urlMega: string | null,
+  ): Promise<DashboardPeriodo>;
 }

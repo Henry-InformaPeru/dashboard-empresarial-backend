@@ -10,7 +10,14 @@ import { USUARIO_ADMIN_REPOSITORY } from './application/ports/output/usuarioAdmi
 import { UsuarioAdminRepository } from './infrastructure/persistence/repositories/usuarioAdminRepository';
 
 import { CrearUsuarioUseCase } from './application/useCase/crearUsuarioUseCase';
+import { ListarUsuariosUseCase } from './application/useCase/listarUsuariosUseCase';
+import { ObtenerDetalleUsuarioUseCase } from './application/useCase/obtenerDetalleUsuarioUseCase';
+import { CambiarEstadoUsuarioUseCase } from './application/useCase/cambiarEstadoUsuarioUseCase';
+
 import { CrearUsuarioController } from './infrastructure/http/controllers/crearUsuarioController';
+import { ListarUsuariosController } from './infrastructure/http/controllers/listarUsuariosController';
+import { ObtenerDetalleUsuarioController } from './infrastructure/http/controllers/obtenerDetalleUsuarioController';
+import { CambiarEstadoUsuarioController } from './infrastructure/http/controllers/cambiarEstadoUsuarioController';
 
 import { RolesGuard } from '../../shared/infrastructure/guards/rolesGuard';
 
@@ -20,9 +27,17 @@ import { RolesGuard } from '../../shared/infrastructure/guards/rolesGuard';
     AuthModule,
     EmpresasModule,
   ],
-  controllers: [CrearUsuarioController],
+  controllers: [
+    CrearUsuarioController,
+    ListarUsuariosController,
+    ObtenerDetalleUsuarioController,
+    CambiarEstadoUsuarioController,
+  ],
   providers: [
     CrearUsuarioUseCase,
+    ListarUsuariosUseCase,
+    ObtenerDetalleUsuarioUseCase,
+    CambiarEstadoUsuarioUseCase,
     RolesGuard,
     {
       provide: USUARIO_ADMIN_REPOSITORY,

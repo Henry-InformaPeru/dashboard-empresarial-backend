@@ -17,6 +17,8 @@ import { ObtenerEnlacesPeriodoUseCase } from './application/useCase/obtenerEnlac
 
 import { ListarPeriodosController } from './infrastructure/http/controllers/listarPeriodosController';
 import { ObtenerEnlacesPeriodoController } from './infrastructure/http/controllers/obtenerEnlacesPeriodoController';
+import { CrearPeriodoController } from './infrastructure/http/controllers/crearPeriodoController';
+import { CrearPeriodoUseCase } from './application/useCase/crearPeriodoUseCase';
 
 @Module({
   imports: [
@@ -28,11 +30,16 @@ import { ObtenerEnlacesPeriodoController } from './infrastructure/http/controlle
     ]),
   ],
 
-  controllers: [ListarPeriodosController, ObtenerEnlacesPeriodoController],
+  controllers: [
+    ListarPeriodosController,
+    ObtenerEnlacesPeriodoController,
+    CrearPeriodoController,
+  ],
 
   providers: [
     ListarPeriodosUseCase,
     ObtenerEnlacesPeriodoUseCase,
+    CrearPeriodoUseCase,
     {
       provide: PERIODO_REPOSITORY,
       useClass: PeriodoRepository,

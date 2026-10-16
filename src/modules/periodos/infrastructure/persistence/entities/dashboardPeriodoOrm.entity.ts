@@ -1,8 +1,8 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ schema: 'reportes', name: 'DashboardPeriodos' })
 export class DashboardPeriodoOrmEntity {
-  @PrimaryColumn({ name: 'id_dashboard_periodo', type: 'int' })
+  @PrimaryGeneratedColumn({ name: 'id_dashboard_periodo', type: 'int' })
   id!: number;
 
   @Column({ name: 'id_dashboard', type: 'int' })

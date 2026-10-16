@@ -21,4 +21,8 @@ export class UsuarioService {
   requiereEmpresa(rolId: number): boolean {
     return rolId === 2;
   }
+
+  validarEstado(estado: string): boolean {
+    return ['ACTIVO', 'INACTIVO'].includes(estado.toUpperCase());
+  }
 }

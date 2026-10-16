@@ -96,4 +96,40 @@ export class UsuarioAdminRepository implements UsuarioAdminRepositoryPort {
 
     return numero === 2601 || numero === 2627;
   }
+
+  async buscarPorId(id: number): Promise<Usuario | null> {
+    const usuario = await this.repository.findOne({ where: { id } });
+    if (!usuario) return null;
+
+    return {
+      id: usuario.id,
+      empresaId: usuario.empresaId,
+      rolId: usuario.rolId,
+      username: usuario.username,
+      email: usuario.email,
+      nombreCompleto: usuario.nombreCompleto,
+      passwordHash: '',
+      estado: usuario.estado,
+      fechaCreacion: usuario.fechaCreacion,
+    };
+  }
+
+  async listarTodos(): Promise<Usuario[]> {
+    const usuarios = await this.repository.find();
+    return usuarios.map((usuario) => ({
+      id: usuario.id,
+      empresaId: usuario.empresaId,
+      rolId: usuario.rolId,
+      username: usuario.username,
+      email: usuario.email,
+      nombreCompleto: usuario.nombreCompleto,
+      passwordHash: '',
+      estado: usuario.estado,
+      fechaCreacion: usuario.fechaCreacion,
+    }));
+  }
+
+  async actualizarEstado(id: number, estado: string): Promise<void> {
+    await this.repository.update(id, { estado });
+  }
 }

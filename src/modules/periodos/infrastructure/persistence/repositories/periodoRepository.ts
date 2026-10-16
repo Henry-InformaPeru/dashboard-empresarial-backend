@@ -61,4 +61,22 @@ export class PeriodoRepository implements PeriodoRepositoryPort {
 
     return cantidad > 0;
   }
+
+  async crear(
+    dashboardId: number,
+    periodo: string,
+    urlPowerbi: string,
+    urlMega: string | null,
+  ): Promise<DashboardPeriodo> {
+    const nuevoRegistro = this.periodoRepository.create({
+      dashboardId,
+      periodo,
+      urlPowerbi,
+      urlMega: urlMega ?? null,
+      fechaCreacion: new Date(),
+    });
+
+    const guardado = await this.periodoRepository.save(nuevoRegistro);
+    return PeriodoMapper.toDomain(guardado);
+  }
 }

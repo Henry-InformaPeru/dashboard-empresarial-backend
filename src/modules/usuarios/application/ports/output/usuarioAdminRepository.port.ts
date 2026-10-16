@@ -13,6 +13,8 @@ export interface DatosNuevoUsuario {
 
 export interface UsuarioAdminRepositoryPort {
   buscarPorUsername(username: string): Promise<Usuario | null>;
-
+  buscarPorId(id: number): Promise<Usuario | null>;
+  listarTodos(): Promise<Usuario[]>;
   crear(datos: DatosNuevoUsuario): Promise<Usuario>;
+  actualizarEstado(id: number, estado: string): Promise<void>;
 }
