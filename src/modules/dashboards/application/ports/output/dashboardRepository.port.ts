@@ -14,4 +14,10 @@ export interface DashboardRepositoryPort {
   listarAsignadosPorEmpresa(
     empresaId: number,
   ): Promise<DashboardAsignadoEmpresaDto[]>;
+
+  crear(datos: {
+    codigo: string;
+    nombre: string;
+    descripcion: string | null;
+  }): Promise<Dashboard>;
 }

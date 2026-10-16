@@ -122,4 +122,21 @@ export class DashboardRepository implements DashboardRepositoryPort {
       };
     });
   }
+
+  async crear(datos: {
+    codigo: string;
+    nombre: string;
+    descripcion: string | null;
+  }): Promise<Dashboard> {
+    const nuevo = this.repository.create({
+      codigo: datos.codigo,
+      nombre: datos.nombre,
+      descripcion: datos.descripcion,
+      estado: 'ACTIVO',
+      fechaCreacion: new Date(),
+    });
+
+    const guardado = await this.repository.save(nuevo);
+    return DashboardMapper.toDomain(guardado);
+  }
 }

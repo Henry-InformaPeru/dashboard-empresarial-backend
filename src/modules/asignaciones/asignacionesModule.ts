@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from '../auth/authModule';
@@ -23,8 +23,8 @@ import { RolesGuard } from '../../shared/infrastructure/guards/rolesGuard';
   imports: [
     TypeOrmModule.forFeature([EmpresaDashboardOrmEntity]),
     AuthModule,
-    EmpresasModule,
-    DashboardsModule,
+    forwardRef(() => EmpresasModule),
+    forwardRef(() => DashboardsModule),
   ],
   controllers: [
     AsignarDashboardController,
@@ -39,5 +39,6 @@ import { RolesGuard } from '../../shared/infrastructure/guards/rolesGuard';
       useClass: AsignacionRepository,
     },
   ],
+  exports: [ASIGNACION_REPOSITORY],
 })
 export class AsignacionesModule {}

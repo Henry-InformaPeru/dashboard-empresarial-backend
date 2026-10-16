@@ -3,7 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import type { Empresa } from '../../../domain/entities/empresa.entity';
-import type { EmpresaRepositoryPort } from '../../../application/ports/output/empresaRepository.port';
+import type {
+  DatosNuevaEmpresa,
+  EmpresaRepositoryPort,
+} from '../../../application/ports/output/empresaRepository.port';
 
 import { EmpresaOrmEntity } from '../entities/empresaOrm.entity';
 import { EmpresaMapper } from '../mappers/empresaMapper';
@@ -29,5 +32,17 @@ export class EmpresaRepository implements EmpresaRepositoryPort {
     });
 
     return empresa ? EmpresaMapper.toDomain(empresa) : null;
+  }
+
+  async crear(datos: DatosNuevaEmpresa): Promise<Empresa> {
+    const nueva = this.repository.create({
+      nombre: datos.nombre,
+      ruc: datos.ruc,
+      estado: 'ACTIVO',
+      fechaCreacion: new Date(),
+    });
+
+    const guardada = await this.repository.save(nueva);
+    return EmpresaMapper.toDomain(guardada);
   }
 }

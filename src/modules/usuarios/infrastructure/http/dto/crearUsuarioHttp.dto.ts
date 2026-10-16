@@ -34,7 +34,7 @@ export class CrearUsuarioHttpDto {
   nombreCompleto!: string | null;
 
   @IsString()
-  @MinLength(12)
+  @MinLength(6)
   @MaxLength(72)
   password!: string;
 }
