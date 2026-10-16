@@ -1,8 +1,8 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ schema: 'comercial', name: 'Empresas' })
 export class EmpresaOrmEntity {
-  @PrimaryColumn({ name: 'id_empresa', type: 'int' })
+  @PrimaryGeneratedColumn('increment', { name: 'id_empresa', type: 'int' })
   id!: number;
 
   @Column({ name: 'nombre', type: 'nvarchar', length: 200 })

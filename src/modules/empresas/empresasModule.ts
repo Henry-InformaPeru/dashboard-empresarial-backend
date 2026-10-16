@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from '../auth/authModule';
@@ -16,13 +16,28 @@ import { ObtenerEmpresaController } from './infrastructure/http/controllers/obte
 
 import { RolesGuard } from '../../shared/infrastructure/guards/rolesGuard';
 import { EmpresaGuard } from '../../shared/infrastructure/guards/empresaGuard';
+import { CrearEmpresaUseCase } from './application/useCase/CrearEmpresaUseCase';
+import { CrearEmpresaController } from './infrastructure/http/controllers/CrearEmpresaController';
+import { DashboardsModule } from '../dashboards/dashboardsModule';
+import { AsignacionesModule } from '../asignaciones/asignacionesModule';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([EmpresaOrmEntity]), AuthModule],
-  controllers: [ListarEmpresasController, ObtenerEmpresaController],
+  imports: [
+    TypeOrmModule.forFeature([EmpresaOrmEntity]),
+    AuthModule,
+    forwardRef(() => DashboardsModule),
+    forwardRef(() => AsignacionesModule),
+
+  ],
+  controllers: [
+    ListarEmpresasController,
+    ObtenerEmpresaController,
+    CrearEmpresaController,
+  ],
   providers: [
     ListarEmpresasUseCase,
     ObtenerEmpresaUseCase,
+    CrearEmpresaUseCase,
     RolesGuard,
     EmpresaGuard,
     {

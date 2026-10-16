@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from '../auth/authModule';
@@ -26,7 +26,7 @@ import { RolesGuard } from '../../shared/infrastructure/guards/rolesGuard';
   imports: [
     TypeOrmModule.forFeature([DashboardOrmEntity, EmpresaDashboardOrmEntity]),
     AuthModule,
-    EmpresasModule,
+    forwardRef(() => EmpresasModule),
   ],
   controllers: [
     ListarMisDashboardsController,

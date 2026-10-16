@@ -5,7 +5,7 @@ export class UsuarioService {
 
   validarPassword(password: string): boolean {
     return (
-      password.length >= 12 &&
+      password.length >= 6 &&
       password.length <= 72 &&
       /[A-Z]/.test(password) &&
       /[a-z]/.test(password) &&
