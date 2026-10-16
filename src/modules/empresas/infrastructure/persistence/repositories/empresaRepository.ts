@@ -17,7 +17,7 @@ export class EmpresaRepository implements EmpresaRepositoryPort {
 
   async listar(): Promise<Empresa[]> {
     const empresas = await this.repository.find({
-      order: { id: 'ASC' },
+      order: { id: 'DESC' },
     });
 
     return empresas.map((empresa) => EmpresaMapper.toDomain(empresa));
