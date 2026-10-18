@@ -1,12 +1,23 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 
 import { AppModule } from './app.module';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.enableCors();
+  // Detrás del túnel de Cloudflare: así Express ve la IP real y el protocolo original
+  if (process.env.TRUST_PROXY === 'true') {
+    app.set('trust proxy', true);
+  }
+
+  // En producción CORS_ORIGIN lista las webs permitidas; vacío = cualquiera (solo desarrollo)
+  const origenes = (process.env.CORS_ORIGIN ?? '')
+    .split(',')
+    .map((origen) => origen.trim())
+    .filter(Boolean);
+  app.enableCors(origenes.length > 0 ? { origin: origenes } : undefined);
 
   // Validación global de los DTO
   app.useGlobalPipes(

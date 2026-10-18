@@ -20,7 +20,8 @@ export class UsuarioRepository implements UsuarioRepositoryPort {
     const usuario = await this.repository
       .createQueryBuilder('usuario')
       .addSelect('usuario.passwordHash')
-      .where('usuario.username = :username', { username })
+      // Sin distinguir mayúsculas, como hacía SQL Server por su collation
+      .where('LOWER(usuario.username) = LOWER(:username)', { username })
       .getOne();
 
     return usuario ? UsuarioMapper.toDomain(usuario) : null;

@@ -11,17 +11,17 @@ export class DashboardPeriodoOrmEntity {
   @Column({ name: 'periodo', type: 'char', length: 6 })
   periodo!: string;
 
-  @Column({ name: 'url_powerbi', type: 'nvarchar', length: 2048 })
+  @Column({ name: 'url_powerbi', type: 'varchar', length: 2048 })
   urlPowerbi!: string;
 
   @Column({
     name: 'url_mega',
-    type: 'nvarchar',
+    type: 'varchar',
     length: 2048,
     nullable: true,
   })
   urlMega!: string | null;
 
-  @Column({ name: 'fecha_creacion', type: 'datetime2' })
+  @Column({ name: 'fecha_creacion', type: 'timestamptz' })
   fechaCreacion!: Date;
 }

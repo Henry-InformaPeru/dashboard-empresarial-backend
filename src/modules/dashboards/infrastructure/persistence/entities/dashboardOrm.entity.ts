@@ -8,12 +8,12 @@ export class DashboardOrmEntity {
   @Column({ name: 'codigo', type: 'varchar', length: 50 })
   codigo!: string;
 
-  @Column({ name: 'nombre', type: 'nvarchar', length: 255 })
+  @Column({ name: 'nombre', type: 'varchar', length: 255 })
   nombre!: string;
 
   @Column({
     name: 'descripcion',
-    type: 'nvarchar',
+    type: 'varchar',
     length: 500,
     nullable: true,
   })
@@ -22,6 +22,6 @@ export class DashboardOrmEntity {
   @Column({ name: 'estado', type: 'varchar', length: 20 })
   estado!: string;
 
-  @Column({ name: 'fecha_creacion', type: 'datetime2' })
+  @Column({ name: 'fecha_creacion', type: 'timestamptz' })
   fechaCreacion!: Date;
 }
