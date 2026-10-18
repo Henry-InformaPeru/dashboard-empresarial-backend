@@ -16,8 +16,8 @@ export class EmpresaDashboardOrmEntity {
 
   @Column({
     name: 'fecha_asignacion',
-    type: 'datetime2',
-    default: () => 'SYSDATETIME()',
+    type: 'timestamptz',
+    default: () => 'now()',
   })
   fechaAsignacion!: Date;
 
@@ -31,7 +31,7 @@ export class EmpresaDashboardOrmEntity {
 
   @Column({
     name: 'fecha_desactivacion',
-    type: 'datetime2',
+    type: 'timestamptz',
     nullable: true,
   })
   fechaDesactivacion!: Date | null;

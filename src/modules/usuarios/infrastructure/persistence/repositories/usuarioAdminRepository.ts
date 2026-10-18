@@ -19,9 +19,11 @@ export class UsuarioAdminRepository implements UsuarioAdminRepositoryPort {
   ) {}
 
   async buscarPorUsername(username: string): Promise<Usuario | null> {
-    const usuario = await this.repository.findOne({
-      where: { username },
-    });
+    // Sin distinguir mayúsculas, como hacía SQL Server por su collation
+    const usuario = await this.repository
+      .createQueryBuilder('usuario')
+      .where('LOWER(usuario.username) = LOWER(:username)', { username })
+      .getOne();
 
     if (!usuario) {
       return null;
@@ -80,21 +82,16 @@ export class UsuarioAdminRepository implements UsuarioAdminRepositoryPort {
     }
 
     const candidato = error as {
-      number?: number;
+      code?: string;
       driverError?: {
-        number?: number;
-        originalError?: {
-          number?: number;
-        };
+        code?: string;
       };
     };
 
-    const numero =
-      candidato.number ??
-      candidato.driverError?.number ??
-      candidato.driverError?.originalError?.number;
+    const codigo = candidato.code ?? candidato.driverError?.code;
 
-    return numero === 2601 || numero === 2627;
+    // PostgreSQL: 23505 = unique_violation
+    return codigo === '23505';
   }
 
   async buscarPorId(id: number): Promise<Usuario | null> {

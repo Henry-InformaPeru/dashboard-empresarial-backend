@@ -5,7 +5,7 @@ export class EmpresaOrmEntity {
   @PrimaryColumn({ name: 'id_empresa', type: 'int' })
   id!: number;
 
-  @Column({ name: 'nombre', type: 'nvarchar', length: 200 })
+  @Column({ name: 'nombre', type: 'varchar', length: 200 })
   nombre!: string;
 
   @Column({
@@ -19,6 +19,6 @@ export class EmpresaOrmEntity {
   @Column({ name: 'estado', type: 'varchar', length: 20 })
   estado!: string;
 
-  @Column({ name: 'fecha_creacion', type: 'datetime2' })
+  @Column({ name: 'fecha_creacion', type: 'timestamptz' })
   fechaCreacion!: Date;
 }

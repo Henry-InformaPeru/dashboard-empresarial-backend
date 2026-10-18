@@ -10,6 +10,7 @@ import { DashboardsModule } from './modules/dashboards/dashboardsModule';
 import { PeriodosModule } from './modules/periodos/periodosModule';
 import { AsignacionesModule } from './modules/asignaciones/asignacionesModule';
 import { UsuariosModule } from './modules/usuarios/usuariosModule';
+import { HealthController } from './modules/health/healthController';
 
 @Module({
   imports: [
@@ -30,5 +31,6 @@ import { UsuariosModule } from './modules/usuarios/usuariosModule';
     AsignacionesModule,
     UsuariosModule,
   ],
+  controllers: [HealthController],
 })
 export class AppModule {}

@@ -45,7 +45,7 @@ export class AsignacionRepository implements AsignacionRepositoryPort {
 
       return AsignacionMapper.toDomain(creada);
     } catch (error: unknown) {
-      // SQL Server: errores de índice único
+      // PostgreSQL: error de índice único
       if (this.esErrorDuplicado(error)) {
         throw new ConflictException(
           'El dashboard ya tiene una asignación con esta empresa',
@@ -99,20 +99,15 @@ export class AsignacionRepository implements AsignacionRepositoryPort {
     }
 
     const candidato = error as {
-      number?: number;
+      code?: string;
       driverError?: {
-        number?: number;
-        originalError?: {
-          number?: number;
-        };
+        code?: string;
       };
     };
 
-    const numero =
-      candidato.number ??
-      candidato.driverError?.number ??
-      candidato.driverError?.originalError?.number;
+    const codigo = candidato.code ?? candidato.driverError?.code;
 
-    return numero === 2601 || numero === 2627;
+    // PostgreSQL: 23505 = unique_violation
+    return codigo === '23505';
   }
 }

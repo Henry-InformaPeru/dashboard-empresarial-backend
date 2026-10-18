@@ -27,7 +27,7 @@ export class UsuarioOrmEntity {
 
   @Column({
     name: 'nombre_completo',
-    type: 'nvarchar',
+    type: 'varchar',
     length: 255,
     nullable: true,
   })
@@ -51,8 +51,8 @@ export class UsuarioOrmEntity {
 
   @Column({
     name: 'fecha_creacion',
-    type: 'datetime2',
-    default: () => 'SYSDATETIME()',
+    type: 'timestamptz',
+    default: () => 'now()',
   })
   fechaCreacion!: Date;
 }
