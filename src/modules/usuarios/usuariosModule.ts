@@ -13,11 +13,15 @@ import { CrearUsuarioUseCase } from './application/useCase/crearUsuarioUseCase';
 import { ListarUsuariosUseCase } from './application/useCase/listarUsuariosUseCase';
 import { ObtenerDetalleUsuarioUseCase } from './application/useCase/obtenerDetalleUsuarioUseCase';
 import { CambiarEstadoUsuarioUseCase } from './application/useCase/cambiarEstadoUsuarioUseCase';
+import { CambiarPasswordUsuarioUseCase } from './application/useCase/cambiarPasswordUsuarioUseCase';
+import { EliminarUsuarioUseCase } from './application/useCase/eliminarUsuarioUseCase';
 
 import { CrearUsuarioController } from './infrastructure/http/controllers/crearUsuarioController';
 import { ListarUsuariosController } from './infrastructure/http/controllers/listarUsuariosController';
 import { ObtenerDetalleUsuarioController } from './infrastructure/http/controllers/obtenerDetalleUsuarioController';
 import { CambiarEstadoUsuarioController } from './infrastructure/http/controllers/cambiarEstadoUsuarioController';
+import { CambiarPasswordUsuarioController } from './infrastructure/http/controllers/cambiarPasswordUsuarioController';
+import { EliminarUsuarioController } from './infrastructure/http/controllers/eliminarUsuarioController';
 
 import { RolesGuard } from '../../shared/infrastructure/guards/rolesGuard';
 
@@ -32,12 +36,16 @@ import { RolesGuard } from '../../shared/infrastructure/guards/rolesGuard';
     ListarUsuariosController,
     ObtenerDetalleUsuarioController,
     CambiarEstadoUsuarioController,
+    CambiarPasswordUsuarioController,
+    EliminarUsuarioController,
   ],
   providers: [
     CrearUsuarioUseCase,
     ListarUsuariosUseCase,
     ObtenerDetalleUsuarioUseCase,
     CambiarEstadoUsuarioUseCase,
+    CambiarPasswordUsuarioUseCase,
+    EliminarUsuarioUseCase,
     RolesGuard,
     {
       provide: USUARIO_ADMIN_REPOSITORY,

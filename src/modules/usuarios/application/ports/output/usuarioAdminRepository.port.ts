@@ -17,4 +17,6 @@ export interface UsuarioAdminRepositoryPort {
   listarTodos(): Promise<Usuario[]>;
   crear(datos: DatosNuevoUsuario): Promise<Usuario>;
   actualizarEstado(id: number, estado: string): Promise<void>;
+  actualizarPasswordHash(id: number, passwordHash: string): Promise<void>;
+  eliminar(id: number): Promise<void>;
 }
