@@ -44,6 +44,7 @@ export class CambiarEstadoUsuarioController {
       id,
       estadoStr,
       request.user.rolId,
+      request.user.sub,
     );
     return {
       message: `Estado del usuario actualizado a ${estadoStr} correctamente`,

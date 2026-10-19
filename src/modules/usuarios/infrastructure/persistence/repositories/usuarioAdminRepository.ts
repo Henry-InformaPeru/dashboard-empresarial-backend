@@ -129,4 +129,15 @@ export class UsuarioAdminRepository implements UsuarioAdminRepositoryPort {
   async actualizarEstado(id: number, estado: string): Promise<void> {
     await this.repository.update(id, { estado });
   }
+
+  async actualizarPasswordHash(
+    id: number,
+    passwordHash: string,
+  ): Promise<void> {
+    await this.repository.update(id, { passwordHash });
+  }
+
+  async eliminar(id: number): Promise<void> {
+    await this.repository.delete(id);
+  }
 }

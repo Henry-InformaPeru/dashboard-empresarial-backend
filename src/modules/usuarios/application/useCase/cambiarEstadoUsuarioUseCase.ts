@@ -24,6 +24,7 @@ export class CambiarEstadoUsuarioUseCase {
     idUsuario: number,
     nuevoEstado: string,
     rolAdministrador: number | null,
+    idAdministrador: number,
   ): Promise<void> {
     if (rolAdministrador !== 1) {
       throw new ForbiddenException(
@@ -37,6 +38,10 @@ export class CambiarEstadoUsuarioUseCase {
       throw new BadRequestException(
         'Estado no válido. Debe ser ACTIVO o INACTIVO',
       );
+    }
+
+    if (idUsuario === idAdministrador && estadoNormalizado === 'INACTIVO') {
+      throw new BadRequestException('No puedes desactivar tu propia cuenta');
     }
 
     const usuario = await this.usuarioRepository.buscarPorId(idUsuario);
