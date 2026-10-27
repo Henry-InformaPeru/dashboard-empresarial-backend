@@ -9,6 +9,7 @@ import { DashboardOrmEntity } from '../entities/dashboardOrm.entity';
 import { EmpresaDashboardOrmEntity } from '../entities/empresaDashboardOrm.entity';
 import { DashboardMapper } from '../mappers/dashboardMapper';
 import type { DashboardAsignadoEmpresaDto } from '../../../application/dto/dashboardAsignadoEmpresa.dto';
+import { enlacePowerBiLegible } from '../../../../periodos/domain/services/enlacesPeriodo';
 
 @Injectable()
 export class DashboardRepository implements DashboardRepositoryPort {
@@ -72,6 +73,7 @@ export class DashboardRepository implements DashboardRepositoryPort {
       .addSelect('dashboard.nombre', 'dashboard_nombre')
       .addSelect('dashboard.descripcion', 'dashboard_descripcion')
       .addSelect('dashboard.estado', 'dashboard_estado')
+      .addSelect('dashboard.urlPowerbi', 'dashboard_urlPowerbi')
       .addSelect('asignacion.id', 'asignacion_id')
       .addSelect('asignacion.estado', 'asignacion_estado')
       .addSelect('asignacion.fechaAsignacion', 'asignacion_fechaAsignacion')
@@ -88,6 +90,7 @@ export class DashboardRepository implements DashboardRepositoryPort {
         dashboard_nombre: string;
         dashboard_descripcion: string | null;
         dashboard_estado: string;
+        dashboard_urlPowerbi: string | null;
         asignacion_id: number;
         asignacion_estado: string;
         asignacion_fechaAsignacion: Date;
@@ -110,6 +113,9 @@ export class DashboardRepository implements DashboardRepositoryPort {
           nombre: registro.dashboard_nombre,
           descripcion: registro.dashboard_descripcion,
           estado: registro.dashboard_estado,
+          urlPowerbi: registro.dashboard_urlPowerbi
+            ? enlacePowerBiLegible(registro.dashboard_urlPowerbi)
+            : null,
           fechaCreacion: registro.dashboard_fechaCreacion,
         },
 

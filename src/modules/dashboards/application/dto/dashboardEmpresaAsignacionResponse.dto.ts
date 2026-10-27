@@ -4,6 +4,7 @@ export interface DashboardEmpresaAsignacionResponseDto {
   nombre: string;
   descripcion: string | null;
   estado: string;
+  urlPowerbi: string | null;
 
   asignacion: {
     id: number;

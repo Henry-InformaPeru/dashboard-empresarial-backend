@@ -52,6 +52,7 @@ export class ListarDashboardsEmpresaUseCase {
       nombre: dashboard.nombre,
       descripcion: dashboard.descripcion,
       estado: dashboard.estado,
+      urlPowerbi: dashboard.urlPowerbi,
       asignacion: {
         id: asignacion.id,
         estado: asignacion.estado,

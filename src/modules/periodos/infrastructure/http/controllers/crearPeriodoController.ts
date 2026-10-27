@@ -38,7 +38,7 @@ export class CrearPeriodoController {
     const periodoCreado = await this.crearPeriodoUseCase.ejecutar(
       dashboardId,
       body.periodo,
-      body.urlPowerbi,
+      body.urlPowerbi ?? null,
       body.urlMega ?? null,
       request.user.rolId,
     );

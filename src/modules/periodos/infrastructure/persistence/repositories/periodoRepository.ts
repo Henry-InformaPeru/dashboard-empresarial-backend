@@ -22,12 +22,17 @@ export class PeriodoRepository implements PeriodoRepositoryPort {
   ) {}
 
   async listarPorDashboard(dashboardId: number): Promise<DashboardPeriodo[]> {
-    const periodos = await this.periodoRepository.find({
-      where: { dashboardId },
-      order: { periodo: 'DESC' },
-    });
+    const [periodos, vinculoReporte] = await Promise.all([
+      this.periodoRepository.find({
+        where: { dashboardId },
+        order: { periodo: 'DESC' },
+      }),
+      this.buscarVinculoPowerbiDelReporte(dashboardId),
+    ]);
 
-    return periodos.map((periodo) => PeriodoMapper.toDomain(periodo));
+    return periodos.map((periodo) =>
+      PeriodoMapper.toDomain(periodo, vinculoReporte),
+    );
   }
 
   async buscarPorDashboardYPeriodo(
@@ -38,7 +43,14 @@ export class PeriodoRepository implements PeriodoRepositoryPort {
       where: { dashboardId, periodo },
     });
 
-    return registro ? PeriodoMapper.toDomain(registro) : null;
+    if (!registro) {
+      return null;
+    }
+
+    return PeriodoMapper.toDomain(
+      registro,
+      await this.buscarVinculoPowerbiDelReporte(dashboardId),
+    );
   }
 
   async tieneAcceso(dashboardId: number, empresaId: number): Promise<boolean> {
@@ -65,18 +77,55 @@ export class PeriodoRepository implements PeriodoRepositoryPort {
   async crear(
     dashboardId: number,
     periodo: string,
-    urlPowerbi: string,
+    urlPowerbi: string | null,
     urlMega: string | null,
   ): Promise<DashboardPeriodo> {
     const nuevoRegistro = this.periodoRepository.create({
       dashboardId,
       periodo,
-      urlPowerbi,
+      urlPowerbi: urlPowerbi ?? null,
       urlMega: urlMega ?? null,
       fechaCreacion: new Date(),
     });
 
     const guardado = await this.periodoRepository.save(nuevoRegistro);
-    return PeriodoMapper.toDomain(guardado);
+
+    return PeriodoMapper.toDomain(
+      guardado,
+      await this.buscarVinculoPowerbiDelReporte(dashboardId),
+    );
+  }
+
+  async cambiarVinculoPowerbiDelReporte(
+    dashboardId: number,
+    urlPowerbi: string,
+  ): Promise<number> {
+    return this.periodoRepository.manager.transaction(async (manager) => {
+      await manager.update(
+        DashboardOrmEntity,
+        { id: dashboardId },
+        { urlPowerbi },
+      );
+
+      // Los periodos dejan de llevar un vínculo propio: todos pasan a usar el del reporte
+      const resultado = await manager.update(
+        DashboardPeriodoOrmEntity,
+        { dashboardId },
+        { urlPowerbi: null },
+      );
+
+      return resultado.affected ?? 0;
+    });
+  }
+
+  private async buscarVinculoPowerbiDelReporte(
+    dashboardId: number,
+  ): Promise<string | null> {
+    const dashboard = await this.dashboardRepository.findOne({
+      where: { id: dashboardId },
+      select: { id: true, urlPowerbi: true },
+    });
+
+    return dashboard?.urlPowerbi ?? null;
   }
 }
