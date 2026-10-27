@@ -32,6 +32,7 @@ export class ListarMisDashboardsUseCase {
       nombre: dashboard.nombre,
       descripcion: dashboard.descripcion,
       estado: dashboard.estado,
+      urlPowerbi: dashboard.urlPowerbi,
     }));
   }
 }

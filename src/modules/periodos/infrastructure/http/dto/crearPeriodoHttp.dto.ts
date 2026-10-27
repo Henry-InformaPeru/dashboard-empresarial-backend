@@ -14,14 +14,12 @@ export class CrearPeriodoHttpDto {
   })
   periodo!: string;
 
-  // Acepta el HTML de «Código para insertar» de Power BI o su vínculo: el caso de uso saca el vínculo limpio (ver enlacesPeriodo.ts).
+  // Opcional: el vínculo de Power BI es del reporte, no del mes. Sin él se usa el del periodo más reciente del reporte.
+  // Si se manda, acepta el HTML de «Código para insertar» de Power BI o su vínculo: el caso de uso saca el vínculo limpio (ver enlacesPeriodo.ts).
   @IsString()
-  @IsNotEmpty({
-    message:
-      'Pega el HTML de «Código para insertar» de Power BI, o su vínculo.',
-  })
+  @IsOptional()
   @MaxLength(8000, { message: 'El texto pegado es demasiado largo.' })
-  urlPowerbi!: string;
+  urlPowerbi?: string | null;
 
   @IsString()
   @IsOptional()

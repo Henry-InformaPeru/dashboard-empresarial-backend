@@ -4,4 +4,5 @@ export interface DashboardResponseDto {
   nombre: string;
   descripcion: string | null;
   estado: string;
+  urlPowerbi: string | null;
 }

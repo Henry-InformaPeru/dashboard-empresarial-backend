@@ -11,8 +11,14 @@ export class DashboardPeriodoOrmEntity {
   @Column({ name: 'periodo', type: 'char', length: 6 })
   periodo!: string;
 
-  @Column({ name: 'url_powerbi', type: 'varchar', length: 2048 })
-  urlPowerbi!: string;
+  // Vínculo propio de este periodo (opcional): sin él, el periodo usa el vínculo de Power BI del reporte.
+  @Column({
+    name: 'url_powerbi',
+    type: 'varchar',
+    length: 2048,
+    nullable: true,
+  })
+  urlPowerbi!: string | null;
 
   @Column({
     name: 'url_mega',

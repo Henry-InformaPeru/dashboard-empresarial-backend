@@ -19,6 +19,8 @@ import { ListarPeriodosController } from './infrastructure/http/controllers/list
 import { ObtenerEnlacesPeriodoController } from './infrastructure/http/controllers/obtenerEnlacesPeriodoController';
 import { CrearPeriodoController } from './infrastructure/http/controllers/crearPeriodoController';
 import { CrearPeriodoUseCase } from './application/useCase/crearPeriodoUseCase';
+import { ActualizarEnlacePowerBiController } from './infrastructure/http/controllers/actualizarEnlacePowerBiController';
+import { ActualizarEnlacePowerBiUseCase } from './application/useCase/actualizarEnlacePowerBiUseCase';
 
 @Module({
   imports: [
@@ -34,12 +36,14 @@ import { CrearPeriodoUseCase } from './application/useCase/crearPeriodoUseCase';
     ListarPeriodosController,
     ObtenerEnlacesPeriodoController,
     CrearPeriodoController,
+    ActualizarEnlacePowerBiController,
   ],
 
   providers: [
     ListarPeriodosUseCase,
     ObtenerEnlacesPeriodoUseCase,
     CrearPeriodoUseCase,
+    ActualizarEnlacePowerBiUseCase,
     {
       provide: PERIODO_REPOSITORY,
       useClass: PeriodoRepository,

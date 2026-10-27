@@ -31,7 +31,7 @@ export class CrearPeriodoUseCase {
   async ejecutar(
     dashboardId: number,
     periodo: string,
-    urlPowerbi: string,
+    urlPowerbi: string | null,
     urlMega: string | null,
     rolId: number | null,
   ): Promise<PeriodoResponseDto> {
@@ -40,8 +40,10 @@ export class CrearPeriodoUseCase {
     }
 
     // Lo pegado pasa a ser solo el vínculo: del HTML «para pegar en un sitio web» de Power BI se guarda su src, nunca el HTML.
-    const powerbi = extraerEnlacePowerBi(urlPowerbi);
-    if (!powerbi.ok) {
+    // El vínculo es opcional: el de Power BI es del reporte, y un periodo solo lleva uno propio si ese mes usa otro reporte.
+    const pegado = urlPowerbi?.trim() ?? '';
+    const powerbi = pegado ? extraerEnlacePowerBi(pegado) : null;
+    if (powerbi && !powerbi.ok) {
       throw new BadRequestException(powerbi.motivo);
     }
     const descarga = validarEnlaceDescarga(urlMega);
@@ -80,7 +82,7 @@ export class CrearPeriodoUseCase {
     const nuevoPeriodo = await this.periodoRepository.crear(
       dashboardId,
       periodo,
-      powerbi.url,
+      powerbi ? powerbi.url : null,
       descarga.url,
     );
 
