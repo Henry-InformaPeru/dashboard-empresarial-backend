@@ -13,6 +13,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import type { PeriodoResponseDto } from '../dto/periodoResponse.dto';
 import { DashboardOrmEntity } from '../../../dashboards/infrastructure/persistence/entities/dashboardOrm.entity';
+import {
+  extraerEnlacePowerBi,
+  validarEnlaceDescarga,
+} from '../../domain/services/enlacesPeriodo';
 
 @Injectable()
 export class CrearPeriodoUseCase {
@@ -33,6 +37,16 @@ export class CrearPeriodoUseCase {
   ): Promise<PeriodoResponseDto> {
     if (rolId !== 1) {
       throw new ForbiddenException('No tiene permisos para crear periodos');
+    }
+
+    // Lo pegado pasa a ser solo el vínculo: del HTML «para pegar en un sitio web» de Power BI se guarda su src, nunca el HTML.
+    const powerbi = extraerEnlacePowerBi(urlPowerbi);
+    if (!powerbi.ok) {
+      throw new BadRequestException(powerbi.motivo);
+    }
+    const descarga = validarEnlaceDescarga(urlMega);
+    if (!descarga.ok) {
+      throw new BadRequestException(descarga.motivo);
     }
 
     // Verificar que el dashboard exista y esté activo
@@ -66,8 +80,8 @@ export class CrearPeriodoUseCase {
     const nuevoPeriodo = await this.periodoRepository.crear(
       dashboardId,
       periodo,
-      urlPowerbi,
-      urlMega ?? null,
+      powerbi.url,
+      descarga.url,
     );
 
     return {
