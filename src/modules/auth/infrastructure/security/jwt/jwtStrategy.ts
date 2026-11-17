@@ -4,7 +4,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { AccesoActualService } from '../../../../../shared/infrastructure/security/accesoActualService';
-
 import type { UsuarioAutenticado } from '../../../../../shared/infrastructure/security/usuarioAutenticado';
 
 @Injectable()
@@ -41,6 +40,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       username: usuario.username,
       rolId: usuario.rolId,
       empresaId: usuario.empresaId,
+      empresaNombre: usuario.empresaNombre ?? null,
+      empresaEsquema: usuario.empresaEsquema ?? null,
     };
   }
 }

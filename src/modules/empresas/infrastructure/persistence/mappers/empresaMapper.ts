@@ -8,6 +8,8 @@ export class EmpresaMapper {
       nombre: entity.nombre,
       ruc: entity.ruc,
       estado: entity.estado,
+      esquema: entity.esquema ?? null,
+      logo: entity.logo ?? null,
       fechaCreacion: entity.fechaCreacion,
     };
   }

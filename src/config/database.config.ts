@@ -14,7 +14,7 @@ export const databaseConfig = (
   database: config.getOrThrow<string>('DB_NAME'),
 
   // En la red interna del servidor la base no usa TLS; con una base remota se activa DB_SSL=true
-  ssl: config.get<string>('DB_SSL') === 'true',
+  ssl: config.get('DB_SSL') === true || config.get('DB_SSL') === 'true',
 
   autoLoadEntities: true,
 

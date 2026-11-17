@@ -25,17 +25,23 @@ export class ObtenerEnlacesPeriodoUseCase {
     rolId: number | null,
     empresaId: number | null,
   ): Promise<EnlacesPeriodoResponseDto> {
-    if (rolId !== 2 || empresaId === null) {
+    if (rolId !== 1 && (rolId !== 2 || empresaId === null)) {
       throw new ForbiddenException('Acceso no permitido');
     }
 
-    const autorizado = await this.periodoRepository.tieneAcceso(
-      dashboardId,
-      empresaId,
-    );
+    if (rolId === 2) {
+      if (empresaId === null) {
+        throw new ForbiddenException('Acceso no permitido');
+      }
 
-    if (!autorizado) {
-      throw new ForbiddenException('No tiene acceso a este dashboard');
+      const autorizado = await this.periodoRepository.tieneAcceso(
+        dashboardId,
+        empresaId,
+      );
+
+      if (!autorizado) {
+        throw new ForbiddenException('No tiene acceso a este dashboard');
+      }
     }
 
     const registro = await this.periodoRepository.buscarPorDashboardYPeriodo(

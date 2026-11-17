@@ -18,4 +18,13 @@ export const envValidationSchema = Joi.object({
   CORS_ORIGIN: Joi.string().allow('').default(''),
   // Detrás del túnel de Cloudflare hay un proxy: true para leer bien la IP del cliente
   TRUST_PROXY: Joi.boolean().default(false),
+
+  // SQL Server (Portfolio v2)
+  SQL_SERVER_HOST: Joi.string().allow('').default(''),
+  SQL_SERVER_PORT: Joi.number().port().default(1433),
+  SQL_SERVER_DATABASE: Joi.string().allow('').default('PORFOLIO'),
+  SQL_SERVER_USER: Joi.string().allow('').default(''),
+  SQL_SERVER_PASSWORD: Joi.string().allow('').default(''),
+  SQL_SERVER_ENCRYPT: Joi.boolean().default(true),
+  SQL_SERVER_TRUST_CERT: Joi.boolean().default(true),
 });

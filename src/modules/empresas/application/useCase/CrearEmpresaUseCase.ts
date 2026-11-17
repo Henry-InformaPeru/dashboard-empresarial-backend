@@ -47,6 +47,8 @@ export class CrearEmpresaUseCase {
     const empresa = await this.empresaRepository.crear({
       nombre,
       ruc: datos.ruc?.trim() || null,
+      esquema: datos.esquema?.trim() || null,
+      logo: datos.logo?.trim() || null,
     });
 
     // 2. Generar código único para su dashboard exclusivo
@@ -67,6 +69,8 @@ export class CrearEmpresaUseCase {
       nombre: empresa.nombre,
       ruc: empresa.ruc,
       estado: empresa.estado,
+      esquema: empresa.esquema ?? null,
+      logo: empresa.logo ?? null,
       fechaCreacion: empresa.fechaCreacion,
     };
   }

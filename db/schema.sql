@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS comercial."Empresas" (
   nombre         varchar(200) NOT NULL,
   ruc            varchar(11),
   estado         varchar(20)  NOT NULL,
+  esquema        varchar(100),
+  logo           text,
   fecha_creacion timestamptz  NOT NULL DEFAULT now()
 );
 
@@ -106,3 +108,7 @@ UPDATE reportes."Dashboards" d
                        ORDER BY p.periodo DESC, p.id_dashboard_periodo DESC
                        LIMIT 1)
  WHERE d.url_powerbi IS NULL;
+
+-- Columna de logo para personalización de marca de cada empresa (almacena Base64 o URL)
+ALTER TABLE comercial."Empresas" ADD COLUMN IF NOT EXISTS logo text;
+ALTER TABLE comercial."Empresas" ADD COLUMN IF NOT EXISTS esquema varchar(100);

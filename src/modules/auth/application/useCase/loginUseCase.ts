@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { CredencialesInvalidasException } from '../../domain/exceptions/credencialesInvalidas.exception';
+import { EmpresaOrmEntity } from '../../../empresas/infrastructure/persistence/entities/empresaOrm.entity';
 
 import type { LoginRequestDto } from '../dto/loginRequest.dto';
 import type { LoginResponseDto } from '../dto/loginResponse.dto';
@@ -31,6 +34,9 @@ export class LoginUseCase {
 
     @Inject(TOKEN_GENERATOR)
     private readonly tokenGenerator: TokenGeneratorPort,
+
+    @InjectRepository(EmpresaOrmEntity)
+    private readonly empresaRepository: Repository<EmpresaOrmEntity>,
   ) {}
 
   async ejecutar(request: LoginRequestDto): Promise<LoginResponseDto> {
@@ -51,6 +57,18 @@ export class LoginUseCase {
       throw new CredencialesInvalidasException();
     }
 
+    let empresaNombre: string | null = null;
+    let empresaEsquema: string | null = null;
+    let empresaLogo: string | null = null;
+    if (usuario.empresaId) {
+      const empresa = await this.empresaRepository.findOne({
+        where: { id: usuario.empresaId },
+      });
+      empresaNombre = empresa ? empresa.nombre : null;
+      empresaEsquema = empresa ? (empresa.esquema || empresa.nombre) : null;
+      empresaLogo = empresa ? (empresa.logo || null) : null;
+    }
+
     const accessToken = await this.tokenGenerator.generar({
       sub: usuario.id,
       username: usuario.username,
@@ -67,6 +85,9 @@ export class LoginUseCase {
         nombreCompleto: usuario.nombreCompleto,
         rolId: usuario.rolId,
         empresaId: usuario.empresaId,
+        empresaNombre,
+        empresaEsquema,
+        empresaLogo,
       },
     };
   }

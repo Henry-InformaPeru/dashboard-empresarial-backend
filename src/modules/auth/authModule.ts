@@ -11,6 +11,7 @@ import { PASSWORD_HASHER } from './application/ports/output/passwordHasher.port'
 import { TOKEN_GENERATOR } from './application/ports/output/tokenGenerator.port';
 
 import { UsuarioOrmEntity } from './infrastructure/persistence/entities/usuarioOrm.entity';
+import { EmpresaOrmEntity } from '../empresas/infrastructure/persistence/entities/empresaOrm.entity';
 import { UsuarioRepository } from './infrastructure/persistence/repositories/usuarioRepository';
 
 import { BcryptPasswordHasher } from './infrastructure/security/bcrypt/bcryptPasswordHasher';
@@ -30,7 +31,7 @@ import { ObtenerPerfilController } from './infrastructure/http/controllers/obten
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UsuarioOrmEntity]),
+    TypeOrmModule.forFeature([UsuarioOrmEntity, EmpresaOrmEntity]),
 
     JwtModule.registerAsync({
       inject: [ConfigService],

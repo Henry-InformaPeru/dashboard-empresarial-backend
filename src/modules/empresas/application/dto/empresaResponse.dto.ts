@@ -3,5 +3,7 @@ export interface EmpresaResponseDto {
   nombre: string;
   ruc: string | null;
   estado: string;
+  esquema?: string | null;
+  logo?: string | null;
   fechaCreacion: Date;
 }

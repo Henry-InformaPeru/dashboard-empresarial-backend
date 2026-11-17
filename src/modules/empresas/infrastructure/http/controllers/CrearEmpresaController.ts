@@ -36,6 +36,8 @@ export class CrearEmpresaController {
       {
         nombre: body.nombre,
         ruc: body.ruc ?? null,
+        esquema: body.esquema ?? null,
+        logo: body.logo ?? null,
       },
       request.user.rolId,
     );

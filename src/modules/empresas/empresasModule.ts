@@ -10,14 +10,18 @@ import { EMPRESA_REPOSITORY } from './application/ports/output/empresaRepository
 
 import { ListarEmpresasUseCase } from './application/useCase/listarEmpresasUseCase';
 import { ObtenerEmpresaUseCase } from './application/useCase/obtenerEmpresaUseCase';
+import { CrearEmpresaUseCase } from './application/useCase/CrearEmpresaUseCase';
+import { ActualizarEmpresaUseCase } from './application/useCase/ActualizarEmpresaUseCase';
+import { EliminarEmpresaUseCase } from './application/useCase/EliminarEmpresaUseCase';
 
 import { ListarEmpresasController } from './infrastructure/http/controllers/listarEmpresasController';
 import { ObtenerEmpresaController } from './infrastructure/http/controllers/obtenerEmpresaController';
+import { CrearEmpresaController } from './infrastructure/http/controllers/CrearEmpresaController';
+import { ActualizarEmpresaController } from './infrastructure/http/controllers/ActualizarEmpresaController';
+import { EliminarEmpresaController } from './infrastructure/http/controllers/EliminarEmpresaController';
 
 import { RolesGuard } from '../../shared/infrastructure/guards/rolesGuard';
 import { EmpresaGuard } from '../../shared/infrastructure/guards/empresaGuard';
-import { CrearEmpresaUseCase } from './application/useCase/CrearEmpresaUseCase';
-import { CrearEmpresaController } from './infrastructure/http/controllers/CrearEmpresaController';
 import { DashboardsModule } from '../dashboards/dashboardsModule';
 import { AsignacionesModule } from '../asignaciones/asignacionesModule';
 
@@ -27,17 +31,20 @@ import { AsignacionesModule } from '../asignaciones/asignacionesModule';
     AuthModule,
     forwardRef(() => DashboardsModule),
     forwardRef(() => AsignacionesModule),
-
   ],
   controllers: [
     ListarEmpresasController,
     ObtenerEmpresaController,
     CrearEmpresaController,
+    ActualizarEmpresaController,
+    EliminarEmpresaController,
   ],
   providers: [
     ListarEmpresasUseCase,
     ObtenerEmpresaUseCase,
     CrearEmpresaUseCase,
+    ActualizarEmpresaUseCase,
+    EliminarEmpresaUseCase,
     RolesGuard,
     EmpresaGuard,
     {

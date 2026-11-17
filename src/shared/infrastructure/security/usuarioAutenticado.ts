@@ -3,4 +3,6 @@ export interface UsuarioAutenticado {
   username: string;
   rolId: number | null;
   empresaId: number | null;
+  empresaNombre?: string | null;
+  empresaEsquema?: string | null;
 }

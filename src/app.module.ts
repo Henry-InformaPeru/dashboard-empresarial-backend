@@ -10,6 +10,7 @@ import { DashboardsModule } from './modules/dashboards/dashboardsModule';
 import { PeriodosModule } from './modules/periodos/periodosModule';
 import { AsignacionesModule } from './modules/asignaciones/asignacionesModule';
 import { UsuariosModule } from './modules/usuarios/usuariosModule';
+import { PortfolioModule } from './modules/portfolio/portfolioModule';
 import { HealthController } from './modules/health/healthController';
 
 @Module({
@@ -30,6 +31,7 @@ import { HealthController } from './modules/health/healthController';
     PeriodosModule,
     AsignacionesModule,
     UsuariosModule,
+    PortfolioModule,
   ],
   controllers: [HealthController],
 })

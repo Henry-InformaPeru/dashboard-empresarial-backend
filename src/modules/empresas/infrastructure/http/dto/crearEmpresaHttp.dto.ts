@@ -10,4 +10,13 @@ export class CrearEmpresaHttpDto {
   @IsString()
   @MaxLength(11)
   ruc!: string | null;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  esquema!: string | null;
+
+  @IsOptional()
+  @IsString()
+  logo?: string | null;
 }

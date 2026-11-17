@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 
 import {
   type DatosNuevoUsuario,
@@ -112,7 +112,11 @@ export class UsuarioAdminRepository implements UsuarioAdminRepositoryPort {
   }
 
   async listarTodos(): Promise<Usuario[]> {
-    const usuarios = await this.repository.find();
+    const usuarios = await this.repository.find({
+      where: {
+        estado: Not('ELIMINADO'),
+      },
+    });
     return usuarios.map((usuario) => ({
       id: usuario.id,
       empresaId: usuario.empresaId,
@@ -138,6 +142,6 @@ export class UsuarioAdminRepository implements UsuarioAdminRepositoryPort {
   }
 
   async eliminar(id: number): Promise<void> {
-    await this.repository.delete(id);
+    await this.repository.update(id, { estado: 'ELIMINADO' });
   }
 }

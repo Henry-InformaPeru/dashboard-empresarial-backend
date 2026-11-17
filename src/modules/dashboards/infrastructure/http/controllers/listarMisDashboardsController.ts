@@ -25,7 +25,7 @@ export class ListarMisDashboardsController {
 
   @Get('mis-dashboards')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(2)
+  @Roles(1, 2)
   async ejecutar(
     @Req() request: RequestAutenticado,
   ): Promise<DashboardResponseDto[]> {

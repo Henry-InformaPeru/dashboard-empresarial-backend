@@ -16,15 +16,21 @@ export class ListarMisDashboardsUseCase {
   ) {}
 
   async ejecutar(usuario: UsuarioAutenticado): Promise<DashboardResponseDto[]> {
-    if (usuario.rolId !== 2 || usuario.empresaId === null) {
+    if (
+      usuario.rolId !== 1 &&
+      (usuario.rolId !== 2 || usuario.empresaId === null)
+    ) {
       throw new ForbiddenException(
         'No tiene permisos para consultar estos dashboards',
       );
     }
 
-    const dashboards = await this.dashboardRepository.listarPorEmpresa(
-      usuario.empresaId,
-    );
+    const dashboards =
+      usuario.empresaId !== null
+        ? await this.dashboardRepository.listarPorEmpresa(usuario.empresaId)
+        : (await this.dashboardRepository.listarTodos()).filter(
+            (d) => d.estado === 'ACTIVO',
+          );
 
     return dashboards.map((dashboard) => ({
       id: dashboard.id,
