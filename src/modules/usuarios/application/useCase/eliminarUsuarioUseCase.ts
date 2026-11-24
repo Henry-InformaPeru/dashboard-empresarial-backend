@@ -10,12 +10,15 @@ import {
   USUARIO_ADMIN_REPOSITORY,
   type UsuarioAdminRepositoryPort,
 } from '../ports/output/usuarioAdminRepository.port';
+import { LicenciasService } from '../../../licencias/licencias.service';
 
 @Injectable()
 export class EliminarUsuarioUseCase {
   constructor(
     @Inject(USUARIO_ADMIN_REPOSITORY)
     private readonly usuarioRepository: UsuarioAdminRepositoryPort,
+
+    private readonly licencias: LicenciasService,
   ) {}
 
   async ejecutar(
@@ -40,5 +43,8 @@ export class EliminarUsuarioUseCase {
     }
 
     await this.usuarioRepository.eliminar(idUsuario);
+
+    // Licencias de Sulotec: una baja libera cupo; se avisa sin demorar la respuesta
+    this.licencias.reportarLuego(usuario.empresaId);
   }
 }

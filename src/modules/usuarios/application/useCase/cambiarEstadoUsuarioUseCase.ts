@@ -9,6 +9,7 @@ import {
   USUARIO_ADMIN_REPOSITORY,
   type UsuarioAdminRepositoryPort,
 } from '../ports/output/usuarioAdminRepository.port';
+import { LicenciasService } from '../../../licencias/licencias.service';
 import { UsuarioService } from '../../domain/services/usuarioService';
 
 @Injectable()
@@ -18,6 +19,8 @@ export class CambiarEstadoUsuarioUseCase {
   constructor(
     @Inject(USUARIO_ADMIN_REPOSITORY)
     private readonly usuarioRepository: UsuarioAdminRepositoryPort,
+
+    private readonly licencias: LicenciasService,
   ) {}
 
   async ejecutar(
@@ -55,6 +58,23 @@ export class CambiarEstadoUsuarioUseCase {
       );
     }
 
-    await this.usuarioRepository.actualizarEstado(idUsuario, estadoNormalizado);
+    // Licencias de Sulotec: reactivar una cuenta de empresa ocupa cupo del plan
+    const ocupaCupo =
+      estadoNormalizado === 'ACTIVO' &&
+      this.usuarioService.requiereEmpresa(usuario.rolId ?? 0) &&
+      usuario.empresaId !== null;
+    const cupo = ocupaCupo
+      ? await this.licencias.verificarCupo(usuario.empresaId, {
+          universal: true,
+        })
+      : null;
+
+    await this.usuarioRepository.actualizarEstado(
+      idUsuario,
+      estadoNormalizado,
+      cupo,
+    );
+
+    this.licencias.reportarLuego(usuario.empresaId);
   }
 }

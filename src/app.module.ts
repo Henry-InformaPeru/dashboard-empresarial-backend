@@ -12,6 +12,7 @@ import { AsignacionesModule } from './modules/asignaciones/asignacionesModule';
 import { UsuariosModule } from './modules/usuarios/usuariosModule';
 import { PortfolioModule } from './modules/portfolio/portfolioModule';
 import { HealthController } from './modules/health/healthController';
+import { LicenciasModule } from './modules/licencias/licenciasModule';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { HealthController } from './modules/health/healthController';
     AsignacionesModule,
     UsuariosModule,
     PortfolioModule,
+    LicenciasModule,
   ],
   controllers: [HealthController],
 })
