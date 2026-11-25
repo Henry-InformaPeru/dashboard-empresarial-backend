@@ -22,6 +22,7 @@ import {
   type EmpresaRepositoryPort,
 } from '../../../empresas/application/ports/output/empresaRepository.port';
 
+import { LicenciasService } from '../../../licencias/licencias.service';
 import { UsuarioService } from '../../domain/services/usuarioService';
 
 import type { CrearUsuarioDto } from '../dto/crearUsuario.dto';
@@ -40,6 +41,8 @@ export class CrearUsuarioUseCase {
 
     @Inject(EMPRESA_REPOSITORY)
     private readonly empresaRepository: EmpresaRepositoryPort,
+
+    private readonly licencias: LicenciasService,
   ) {}
 
   async ejecutar(
@@ -93,16 +96,31 @@ export class CrearUsuarioUseCase {
       throw new ConflictException('El nombre de usuario ya está registrado');
     }
 
+    // Licencias de Sulotec: una cuenta de empresa ocupa cupo del plan (el administrador de Sulotec no)
+    const ocupaCupo =
+      this.usuarioService.requiereEmpresa(datos.rolId) &&
+      datos.empresaId !== null;
+    const cupo = ocupaCupo
+      ? await this.licencias.verificarCupo(datos.empresaId, { universal: true })
+      : null;
+
     const passwordHash = await this.passwordHasher.generar(datos.password);
 
-    const usuario = await this.usuarioRepository.crear({
-      empresaId: datos.empresaId,
-      rolId: datos.rolId,
-      username,
-      email: datos.email?.trim() || null,
-      nombreCompleto: datos.nombreCompleto?.trim() || null,
-      passwordHash,
-    });
+    const usuario = await this.usuarioRepository.crear(
+      {
+        empresaId: datos.empresaId,
+        rolId: datos.rolId,
+        username,
+        email: datos.email?.trim() || null,
+        nombreCompleto: datos.nombreCompleto?.trim() || null,
+        passwordHash,
+      },
+      cupo,
+    );
+
+    if (ocupaCupo) {
+      this.licencias.reportarLuego(usuario.empresaId);
+    }
 
     return {
       id: usuario.id,

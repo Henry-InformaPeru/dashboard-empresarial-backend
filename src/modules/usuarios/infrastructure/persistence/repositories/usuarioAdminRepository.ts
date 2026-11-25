@@ -10,6 +10,10 @@ import {
 import type { Usuario } from '../../../../auth/domain/entities/usuario.entity';
 
 import { UsuarioOrmEntity } from '../../../../auth/infrastructure/persistence/entities/usuarioOrm.entity';
+import {
+  exigirCupoEnTransaccion,
+  type CupoExigido,
+} from '../../../../licencias/licencias.service';
 
 @Injectable()
 export class UsuarioAdminRepository implements UsuarioAdminRepositoryPort {
@@ -42,19 +46,27 @@ export class UsuarioAdminRepository implements UsuarioAdminRepositoryPort {
     };
   }
 
-  async crear(datos: DatosNuevoUsuario): Promise<Usuario> {
+  async crear(
+    datos: DatosNuevoUsuario,
+    cupo: CupoExigido | null = null,
+  ): Promise<Usuario> {
     try {
-      const nuevo = this.repository.create({
-        empresaId: datos.empresaId,
-        rolId: datos.rolId,
-        username: datos.username,
-        email: datos.email,
-        nombreCompleto: datos.nombreCompleto,
-        passwordHash: datos.passwordHash,
-        estado: 'ACTIVO',
-      });
-
-      const creado = await this.repository.save(nuevo);
+      // Con cupo: candado por empresa + recuento + alta en la misma transacción (dos altas simultáneas no pasan con el último cupo)
+      const creado = await this.repository.manager.transaction(
+        async (manager) => {
+          await exigirCupoEnTransaccion(manager, cupo);
+          const nuevo = manager.create(UsuarioOrmEntity, {
+            empresaId: datos.empresaId,
+            rolId: datos.rolId,
+            username: datos.username,
+            email: datos.email,
+            nombreCompleto: datos.nombreCompleto,
+            passwordHash: datos.passwordHash,
+            estado: 'ACTIVO',
+          });
+          return manager.save(nuevo);
+        },
+      );
 
       return {
         id: creado.id,
@@ -130,8 +142,20 @@ export class UsuarioAdminRepository implements UsuarioAdminRepositoryPort {
     }));
   }
 
-  async actualizarEstado(id: number, estado: string): Promise<void> {
-    await this.repository.update(id, { estado });
+  async actualizarEstado(
+    id: number,
+    estado: string,
+    cupo: CupoExigido | null = null,
+  ): Promise<void> {
+    if (!cupo) {
+      await this.repository.update(id, { estado });
+      return;
+    }
+    // Reactivar ocupa cupo: candado por empresa + recuento + cambio en la misma transacción
+    await this.repository.manager.transaction(async (manager) => {
+      await exigirCupoEnTransaccion(manager, cupo);
+      await manager.update(UsuarioOrmEntity, id, { estado });
+    });
   }
 
   async actualizarPasswordHash(

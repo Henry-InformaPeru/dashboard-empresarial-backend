@@ -27,4 +27,11 @@ export const envValidationSchema = Joi.object({
   SQL_SERVER_PASSWORD: Joi.string().allow('').default(''),
   SQL_SERVER_ENCRYPT: Joi.boolean().default(true),
   SQL_SERVER_TRUST_CERT: Joi.boolean().default(true),
+
+  // Licencias de Sulotec (servicio común). LICENCIAS_TOKEN vacío = licencias apagadas: todo funciona como siempre.
+  LICENCIAS_URL: Joi.string().allow('').default(''),
+  LICENCIAS_PRODUCTO: Joi.string().allow('').default(''),
+  LICENCIAS_TOKEN: Joi.string().allow('').default(''),
+  // id_empresa=UUID de Keycloak de cada empresa, separados por coma (mientras el producto no guarde el UUID en su base)
+  LICENCIAS_EMPRESAS: Joi.string().allow('').default(''),
 });
